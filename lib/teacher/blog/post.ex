@@ -6,6 +6,7 @@ defmodule Teacher.Blog.Post do
   schema "posts" do
     field :body, :string
     field :title, :string
+    has_many :comments, Teacher.Blog.Comment
 
     timestamps()
   end
