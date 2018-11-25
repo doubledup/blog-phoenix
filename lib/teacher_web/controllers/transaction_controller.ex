@@ -14,11 +14,13 @@ defmodule TeacherWeb.TransactionController do
   end
 
   def create(conn, %{"user_id" => user_id, "command" => "/owen", "text" => text}) do
-    Logger.info("user_id: #{user_id}")
-    Logger.info("text: #{text}")
-
     %{"to" => to, "amount" => amount} = Regex.named_captures(~r/\<@(?<to>.*)\> (?<amount>\d+)/, text)
 
+    user_id = "<@#{user_id}>"
+    to = "<@#{to}>"
+
+    Logger.info("user_id: #{user_id}")
+    Logger.info("text: #{text}")
     Logger.info("to: #{to}")
     Logger.info("amount: #{amount}")
 
@@ -28,7 +30,7 @@ defmodule TeacherWeb.TransactionController do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.transaction_path(conn, :show, transaction))
-      |> render("show.json", transaction: transaction)
+      |> render("echo.json", transaction: transaction, text: "#{user_id} now owes #{amount} more to #{to}")
     end
   end
 

@@ -16,4 +16,8 @@ defmodule TeacherWeb.TransactionView do
       to: transaction.to,
       amount: transaction.amount}
   end
+
+  def render("echo.json", %{text: text}) do
+    %{text: text}
+  end
 end
