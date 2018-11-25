@@ -22,6 +22,12 @@ defmodule TeacherWeb.Router do
     end
   end
 
+  scope "/owen", TeacherWeb do
+    pipe_through :api
+
+    resources "/transactions", TransactionController, except: [:new, :edit]
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", TeacherWeb do
   #   pipe_through :api
