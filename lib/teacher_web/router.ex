@@ -10,7 +10,7 @@ defmodule TeacherWeb.Router do
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug :accepts, ["json", "x-www-form-urlencoded"]
   end
 
   scope "/", TeacherWeb do

@@ -1,3 +1,5 @@
+require Logger
+
 defmodule TeacherWeb.TransactionController do
   use TeacherWeb, :controller
 
@@ -11,8 +13,18 @@ defmodule TeacherWeb.TransactionController do
     render(conn, "index.json", transactions: transactions)
   end
 
-  def create(conn, %{"transaction" => transaction_params}) do
-    with {:ok, %Transaction{} = transaction} <- Owen.create_transaction(transaction_params) do
+  def create(conn, %{"user_id" => user_id, "command" => "/owen", "text" => text}) do
+    Logger.info("user_id: #{user_id}")
+    Logger.info("text: #{text}")
+
+    %{"to" => to, "amount" => amount} = Regex.named_captures(~r/\<@(?<to>.*)\> (?<amount>\d+)/, text)
+
+    Logger.info("to: #{to}")
+    Logger.info("amount: #{amount}")
+
+    amount = String.to_integer(amount)
+
+    with {:ok, %Transaction{} = transaction} <- Owen.create_transaction(%{from: user_id, to: text, amount: amount}) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.transaction_path(conn, :show, transaction))
